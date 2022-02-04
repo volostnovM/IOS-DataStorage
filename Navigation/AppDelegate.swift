@@ -23,6 +23,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             tabBarAppearance.configureWithOpaqueBackground()
             UITabBar.appearance().standardAppearance = tabBarAppearance
         }
+        
+        getRequestToServer()
+        
         return true
     }
 
@@ -39,7 +42,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
-
-
+    
+    
+    private func getRequestToServer() {
+        guard let configuration = AppConfiguration.getArrayURL().randomElement() else { return }
+        print(configuration)
+        
+        NetworkService.fetchData(with: configuration)
+    }
 }
 

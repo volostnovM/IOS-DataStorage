@@ -16,6 +16,8 @@
 		060782C6250CEB0A00A87020 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060782C5250CEB0A00A87020 /* InfoViewController.swift */; };
 		060782C8250CEE5D00A87020 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060782C7250CEE5D00A87020 /* PostViewController.swift */; };
 		2E6B2B27AA813D028A4FEADB /* Pods_StorageService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8E81C8E1E782D29C8925F26 /* Pods_StorageService.framework */; };
+		9F145FDE27AD1C120021D3FE /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F145FDD27AD1C120021D3FE /* AppConfiguration.swift */; };
+		9F145FE227AD1EBB0021D3FE /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F145FE127AD1EBB0021D3FE /* NetworkService.swift */; };
 		9F37E2992720066400A278AD /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F37E2982720066400A278AD /* User.swift */; };
 		9F37E29D2720099400A278AD /* UserServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F37E29C2720099400A278AD /* UserServiceProtocol.swift */; };
 		9F37E2A1272009B700A278AD /* CurrentUserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F37E2A0272009B700A278AD /* CurrentUserService.swift */; };
@@ -74,6 +76,8 @@
 		2E25261A88874A8AEE3D4E20 /* Pods_Navigation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Navigation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		666339EA44E609F884F6ED10 /* Pods-StorageService.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StorageService.release.xcconfig"; path = "Target Support Files/Pods-StorageService/Pods-StorageService.release.xcconfig"; sourceTree = "<group>"; };
 		8635B0525C557B658BC8C3B5 /* Pods-Navigation.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Navigation.release.xcconfig"; path = "Target Support Files/Pods-Navigation/Pods-Navigation.release.xcconfig"; sourceTree = "<group>"; };
+		9F145FDD27AD1C120021D3FE /* AppConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfiguration.swift; sourceTree = "<group>"; };
+		9F145FE127AD1EBB0021D3FE /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		9F37E2982720066400A278AD /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		9F37E29C2720099400A278AD /* UserServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserServiceProtocol.swift; sourceTree = "<group>"; };
 		9F37E2A0272009B700A278AD /* CurrentUserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserService.swift; sourceTree = "<group>"; };
@@ -147,6 +151,7 @@
 		060782B0250CE27700A87020 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
+				9F145FDC27AD1C020021D3FE /* ConfigurationNetWork */,
 				9F7FD21C27A4230A0043192E /* Models */,
 				9F44A0DC26BAC3CA0051A292 /* CollectionPhoto */,
 				9F3DBAD326A7F06000077DA4 /* Profile */,
@@ -183,6 +188,15 @@
 				C8E81C8E1E782D29C8925F26 /* Pods_StorageService.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9F145FDC27AD1C020021D3FE /* ConfigurationNetWork */ = {
+			isa = PBXGroup;
+			children = (
+				9F145FDD27AD1C120021D3FE /* AppConfiguration.swift */,
+				9F145FE127AD1EBB0021D3FE /* NetworkService.swift */,
+			);
+			path = ConfigurationNetWork;
 			sourceTree = "<group>";
 		};
 		9F37E29B2720097600A278AD /* User */ = {
@@ -443,9 +457,11 @@
 				9F63A0C0272942EE0075E199 /* Checker.swift in Sources */,
 				9F9A634B26BD13D9004563EE /* Photo.swift in Sources */,
 				9F9A635226BD25C7004563EE /* PhotosCollectionViewCell.swift in Sources */,
+				9F145FE227AD1EBB0021D3FE /* NetworkService.swift in Sources */,
 				9F9A634E26BD1EA7004563EE /* PhotosViewController.swift in Sources */,
 				060782B6250CE27700A87020 /* FeedViewController.swift in Sources */,
 				9FBBEA6F26B4381500E6CD7A /* ProfileTableHederView.swift in Sources */,
+				9F145FDE27AD1C120021D3FE /* AppConfiguration.swift in Sources */,
 				9F7FD22127A423630043192E /* CustomTextField.swift in Sources */,
 				9F51B4CD2715B72B0010D670 /* PostStorage.swift in Sources */,
 				9F37E29D2720099400A278AD /* UserServiceProtocol.swift in Sources */,
@@ -620,13 +636,13 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 79RZ866842;
+				DEVELOPMENT_TEAM = WP3M76AC2U;
 				INFOPLIST_FILE = Navigation/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.artemnovichkov.Navigation;
+				PRODUCT_BUNDLE_IDENTIFIER = com.volostnov.Navigation;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -640,13 +656,13 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 79RZ866842;
+				DEVELOPMENT_TEAM = WP3M76AC2U;
 				INFOPLIST_FILE = Navigation/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.artemnovichkov.Navigation;
+				PRODUCT_BUNDLE_IDENTIFIER = com.volostnov.Navigation;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -661,7 +677,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 79RZ866842;
+				DEVELOPMENT_TEAM = WP3M76AC2U;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -692,7 +708,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 79RZ866842;
+				DEVELOPMENT_TEAM = WP3M76AC2U;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";

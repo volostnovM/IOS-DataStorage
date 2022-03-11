@@ -13,31 +13,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
     private let loginInspectorFactory = MyLoginFactory()
+    //кастомизация нав бара
+    var appearanceNavBar = AppearanceNavBar()
+    
+    var appCoordinator: AppCoordinator?
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-
+        
         guard let scene = (scene as? UIWindowScene) else { return }
-        window = UIWindow(windowScene: scene)
-        window?.makeKeyAndVisible()
+        self.window = UIWindow(windowScene: scene)
         
-        let tabBarController = UITabBarController()
-        
-        let feedVC = FeedViewController()
-        
-        let loginVC = LogInViewController()
-        loginVC.delegate = loginInspectorFactory.createLoginInspector()
-
-        
-        let feedNavigationVC = UINavigationController(rootViewController: feedVC)
-        feedNavigationVC.tabBarItem = UITabBarItem(title: "Feed", image: UIImage(named: "feed"), tag: 0)
-        
-        let loginNavigationVC = UINavigationController(rootViewController: loginVC)
-        loginNavigationVC.isNavigationBarHidden = true
-        loginNavigationVC.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(named: "profile"), tag: 1)
-        
-        tabBarController.viewControllers = [feedNavigationVC, loginNavigationVC]
-        
-        window?.rootViewController = tabBarController
+        self.appCoordinator = AppCoordinator(window: window)
+        appCoordinator?.start()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

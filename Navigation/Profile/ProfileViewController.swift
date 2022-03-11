@@ -6,8 +6,13 @@
 import UIKit
 import iOSIntPackage
 
+protocol ProfileViewControllerCoordinatorDelegate: AnyObject {
+    func navigateToNextPage()
+}
+
 class ProfileViewController: UIViewController {
     
+    var coordinator: ProfileViewControllerCoordinatorDelegate?
     let header = ProfileHederView()
     
     let userService: UserServiceProtocol

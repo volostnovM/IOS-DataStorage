@@ -6,13 +6,7 @@
 import UIKit
 import StorageService
 
-protocol FeedViewControllerCoordinatorDelegate: AnyObject {
-    func navigateToNextPage()
-}
-
 final class FeedViewController: UIViewController {
-    
-    var coordinator: FeedViewControllerCoordinatorDelegate?
     
     private let checkEnteredWord: CheckEnteredWord?
     
@@ -36,15 +30,6 @@ final class FeedViewController: UIViewController {
                     self?.label.textColor = .systemRed
                 }
             })
-        })
-        button.layer.cornerRadius = 10
-        button.clipsToBounds = true
-        return button
-    }()
-    
-    private lazy var buttonToPost: CustomButton = {
-        let button = CustomButton(title: "To post", titleColor: .white, backgroundColor: nil, backgroundImage: UIImage(imageLiteralResourceName: "pixel"), buttonAction: { [weak self] in
-            self?.coordinator?.navigateToNextPage()
         })
         button.layer.cornerRadius = 10
         button.clipsToBounds = true
@@ -82,11 +67,9 @@ final class FeedViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         self.navigationItem.title = "Feed"
-        self.textField.delegate = self
         
         setupViews()
         setupConstraints()
-        setupHideKeyboardOnTap()
     }
 }
 extension FeedViewController {
@@ -96,7 +79,6 @@ extension FeedViewController {
         stackView.addArrangedSubview(label)
         stackView.addArrangedSubview(textField)
         stackView.addArrangedSubview(buttonCheck)
-        stackView.addArrangedSubview(buttonToPost)
     }
 }
 
@@ -118,31 +100,7 @@ extension FeedViewController {
             buttonCheck.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
             buttonCheck.heightAnchor.constraint(equalToConstant: 50),
             buttonCheck.widthAnchor.constraint(equalToConstant: 300),
-            
-            buttonToPost.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
-            buttonToPost.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
-            buttonToPost.heightAnchor.constraint(equalToConstant: 50),
-            buttonToPost.widthAnchor.constraint(equalToConstant: 300)
         ]
         .forEach {$0.isActive = true}
-    }
-}
-
-extension FeedViewController : UITextFieldDelegate {
-    //Скрытие keyboard при нажатии клавиши Return
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    //Скрытие keyboard при нажатии за пределами TextField
-    func setupHideKeyboardOnTap() {
-        self.view.addGestureRecognizer(self.endEditingRecognizer())
-        self.navigationController?.navigationBar.addGestureRecognizer(self.endEditingRecognizer())
-    }
-    
-    private func endEditingRecognizer() -> UIGestureRecognizer {
-        let tap = UITapGestureRecognizer(target: self.view, action: #selector(self.view.endEditing(_:)))
-        tap.cancelsTouchesInView = false
-        return tap
     }
 }

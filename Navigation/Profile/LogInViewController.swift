@@ -5,14 +5,9 @@
 
 import UIKit
 
-protocol LogInViewControllerCoordinatorDelegate: AnyObject {
-    func navigateToNextPage(userName: String)
-}
-
 class LogInViewController: UIViewController {
     
     var delegate: LoginViewControllerDelegate?
-    var coordinator: LogInViewControllerCoordinatorDelegate?
 
     let scrollView = UIScrollView()
     let contentView = UIView()
@@ -57,6 +52,21 @@ class LogInViewController: UIViewController {
         return textField
     }()
     
+//    var entryButton: UIButton = {
+//        let button = UIButton()
+//        button.translatesAutoresizingMaskIntoConstraints = false
+//        button.setBackgroundImage(#imageLiteral(resourceName: "pixel"), for: .normal)
+//        button.setTitle("Log in", for: .normal)
+//        button.setTitleColor(UIColor.init(white: 1, alpha: 1), for: .normal)
+//        button.setTitleColor(UIColor.init(white: 1, alpha: 0.8), for: .selected)
+//        button.setTitleColor(UIColor.init(white: 1, alpha: 0.8), for: .highlighted)
+//        button.setTitleColor(UIColor.init(white: 1, alpha: 0.8), for: .disabled)
+//        button.clipsToBounds = true
+//        button.layer.cornerRadius = 10
+//
+//        button.addTarget(self, action: #selector(pressLoginButton), for: .touchUpInside)
+//        return button
+//    }()
     
     private lazy var entryButton: CustomButton = {
         let button = CustomButton(title: "Log in", titleColor: .white, backgroundColor: nil, backgroundImage: UIImage(imageLiteralResourceName: "pixel"), buttonAction: { [weak self] in

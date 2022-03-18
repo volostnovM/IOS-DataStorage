@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class FileManagerViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     private let tableView = UITableView(frame: .zero, style: .grouped)
     var imagePicker = UIImagePickerController()
@@ -105,7 +105,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
 }
 
-extension ViewController {
+extension FileManagerViewController {
     func setupConstraint() {
         
         view.addSubview(tableView)
@@ -119,11 +119,10 @@ extension ViewController {
     }
 }
 
-extension ViewController: UITableViewDelegate {
+extension FileManagerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         print("delete")
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { _, _, complete in
-            //self.Items.remove(at: indexPath.row)
             
             var allFileInDirectory = self.getFiles()
             let directoryUrl = allFileInDirectory[indexPath.row]
@@ -153,7 +152,7 @@ extension ViewController: UITableViewDelegate {
     }
 }
 
-extension ViewController: UITableViewDataSource {
+extension FileManagerViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let rowsCount = getFiles().count
@@ -164,6 +163,7 @@ extension ViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "reuseId", for: indexPath)
         let row = getFiles()[indexPath.row].path
         cell.textLabel?.text = (row as NSString).lastPathComponent
+    
         return cell
     }
     

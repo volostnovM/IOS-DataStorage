@@ -8,6 +8,14 @@
 import UIKit
 
 class SettingViewController: UIViewController {
+    
+    // UI elements
+    lazy var settingsTableView: UITableView = {
+        let settingsTableView = UITableView()
+        settingsTableView.translatesAutoresizingMaskIntoConstraints = false
+        settingsTableView.backgroundColor = .systemGray6
+        return settingsTableView
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -17,14 +25,6 @@ class SettingViewController: UIViewController {
         setupContstraint()
         settingsTableView.register(SettingsTableViewCell.self, forCellReuseIdentifier: "SettingsTableViewCell")
     }
-
-    // UI elements
-    lazy var settingsTableView: UITableView = {
-        let settingsTableView = UITableView()
-        settingsTableView.translatesAutoresizingMaskIntoConstraints = false
-        settingsTableView.backgroundColor = .systemGray6
-        return settingsTableView
-    }()
 
     // Constraint
     func setupContstraint() {

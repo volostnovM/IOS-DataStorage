@@ -9,10 +9,11 @@ import UIKit
 
 class FileManagerViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    private let tableView = UITableView(frame: .zero, style: .grouped)
     var imagePicker = UIImagePickerController()
-
+    var filesListArray: [String] = []
     let fileManager = FileManager.default
+    
+    private let tableView = UITableView(frame: .zero, style: .grouped)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +25,7 @@ class FileManagerViewController: UIViewController, UIImagePickerControllerDelega
         
         //показать все файлы из папки
         showFiles()
+        getListFiles()
     }
     
     func showFiles() {
@@ -58,18 +60,8 @@ class FileManagerViewController: UIViewController, UIImagePickerControllerDelega
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "reuseId")
         tableView.dataSource = self
         tableView.delegate = self
-        //tableView.allowsSelection = false
     }
 
-    @objc func buttonAddTapped() {
-        if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum){
-            imagePicker.delegate = self
-            imagePicker.sourceType = .savedPhotosAlbum
-            imagePicker.allowsEditing = false
-
-            present(imagePicker, animated: true, completion: nil)
-        }
-    }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
@@ -97,10 +89,30 @@ class FileManagerViewController: UIViewController, UIImagePickerControllerDelega
                     print("error saving file:", error)
                 }
             }
+            getListFiles()
             tableView.reloadData()
         }
         catch {
             print("Не удается найти указанную ссылку")
+        }
+    }
+    
+    func removeFile(name: String) {
+        guard let url = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(name) else { return }
+        do {
+            try fileManager.removeItem(at: url)
+        } catch {
+            print(error)
+        }
+    }
+    
+    @objc func buttonAddTapped() {
+        if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum){
+            imagePicker.delegate = self
+            imagePicker.sourceType = .savedPhotosAlbum
+            imagePicker.allowsEditing = false
+
+            present(imagePicker, animated: true, completion: nil)
         }
     }
 }
@@ -120,32 +132,12 @@ extension FileManagerViewController {
 }
 
 extension FileManagerViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        print("delete")
-        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { _, _, complete in
-            
-            var allFileInDirectory = self.getFiles()
-            let directoryUrl = allFileInDirectory[indexPath.row]
-            print("File for delete \(directoryUrl)")
-            allFileInDirectory.remove(at: indexPath.row)
-            
-            do {
-                try self.fileManager.removeItem(at: directoryUrl)
-                self.tableView.deleteRows(at: [indexPath], with: .automatic)
-            }
-            catch {
-                print("Не удалось найти файл для удаления")
-            }
-            
-            complete(true)
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+
+            removeFile(name: filesListArray.sorted()[indexPath.row])
+            getListFiles()
+            tableView.reloadData()
         }
-        
-        deleteAction.backgroundColor = .red
-        
-        let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
-        configuration.performsFirstActionWithFullSwipe = true
-        return configuration
-    }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
@@ -155,15 +147,19 @@ extension FileManagerViewController: UITableViewDelegate {
 extension FileManagerViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let rowsCount = getFiles().count
+        let rowsCount = filesListArray.count
         return rowsCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "reuseId", for: indexPath)
-        let row = getFiles()[indexPath.row].path
-        cell.textLabel?.text = (row as NSString).lastPathComponent
-    
+
+        if UserDefaults.standard.bool(forKey: "sort") {
+            cell.textLabel?.text = filesListArray.sorted(by: < )[indexPath.row]
+        } else {
+            cell.textLabel?.text = filesListArray.sorted(by: > )[indexPath.row]
+        }
+        
         return cell
     }
     
@@ -171,13 +167,24 @@ extension FileManagerViewController: UITableViewDataSource {
         var urls: [URL]
         urls = fileManager.urls(for: .documentDirectory, in: .userDomainMask)
         
-        
         do {
             urls = try fileManager.contentsOfDirectory(at: urls[0], includingPropertiesForKeys: nil)
-            //print("fileURLsCount: \(urls)")
         } catch {
             print("Error while enumerating files: \(error.localizedDescription)")
         }
         return urls
+    }
+    
+    func getListFiles() {
+
+        filesListArray = []
+        guard let url = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+        print(url)
+        let contents = try? fileManager.contentsOfDirectory(atPath: url.path)
+        guard let contents = contents else { return }
+
+        for file in contents {
+            filesListArray.append(file)
+        }
     }
 }

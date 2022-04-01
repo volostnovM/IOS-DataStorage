@@ -47,8 +47,6 @@ class ChangeLoginViewController: UIViewController {
         } else {
             self.makeAlert(messageErr: "Ошибка сохранения пароля!")
         }
-
-
     }
 }
 
@@ -65,7 +63,5 @@ extension ChangeLoginViewController {
             changeLoginUIView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
         ]
         NSLayoutConstraint.activate(constraints)
-        
-        
     }
 }

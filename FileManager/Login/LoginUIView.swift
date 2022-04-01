@@ -52,6 +52,22 @@ class LoginUIView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // сброс при вводе неверного повторного пароля
+    func clearAllData() {
+        passwordButton.removeTarget(self, action: #selector(comparePasswords), for: .touchUpInside)
+        passwordButton.addTarget(self, action: #selector(firstPasswordButtonAction), for: .touchUpInside)
+        passwordButton.setTitle("Создать пароль", for: .normal)
+        passwordTextField.text?.removeAll()
+    }
+    
+    // метод сброса интерфейса для ввода пароля повторно
+    func clearUIForSecondPassword() {
+        passwordTextField.text?.removeAll()
+        passwordButton.setTitle("Повторите пароль", for: .normal)
+        passwordButton.removeTarget(self, action: #selector(firstPasswordButtonAction), for: .touchUpInside)
+        passwordButton.addTarget(self, action: #selector(comparePasswords), for: .touchUpInside)
+    }
+    
     //если пароль уже установлен
     @objc func firstPasswordButtonAction() {
         guard let password = passwordTextField.text else { return }
@@ -64,28 +80,11 @@ class LoginUIView: UIView {
         onTapNewPinButton?(password)
     }
     
-    // метод сброса интерфейса для ввода пароля повторно
-    func clearUIForSecondPassword() {
-        passwordTextField.text?.removeAll()
-        passwordButton.setTitle("Повторите пароль", for: .normal)
-        passwordButton.removeTarget(self, action: #selector(firstPasswordButtonAction), for: .touchUpInside)
-        passwordButton.addTarget(self, action: #selector(comparePasswords), for: .touchUpInside)
-    }
-    
     // сверка паролей
     @objc func comparePasswords() {
         guard let password = passwordTextField.text else { return }
         onTapSecondNewPinButton?(password)
     }
-    
-    // сброс при вводе неверного повторного пароля
-    func clearAllData() {
-        passwordButton.removeTarget(self, action: #selector(comparePasswords), for: .touchUpInside)
-        passwordButton.addTarget(self, action: #selector(firstPasswordButtonAction), for: .touchUpInside)
-        passwordButton.setTitle("Создать пароль", for: .normal)
-        passwordTextField.text?.removeAll()
-    }
-
 }
 
 extension LoginUIView {

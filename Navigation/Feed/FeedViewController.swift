@@ -5,6 +5,7 @@
 
 import UIKit
 import StorageService
+import FirebaseAuth
 
 protocol FeedViewControllerCoordinatorDelegate: AnyObject {
     func navigateToNextPage()

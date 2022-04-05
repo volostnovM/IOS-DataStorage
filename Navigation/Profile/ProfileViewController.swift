@@ -5,28 +5,28 @@
 
 import UIKit
 import iOSIntPackage
+import FirebaseAuth
 
 protocol ProfileViewControllerCoordinatorDelegate: AnyObject {
     func navigateToNextPage()
+    func navigateToPreviousPage()
 }
 
 class ProfileViewController: UIViewController {
     
+    var delegate: LoginViewControllerDelegate?
     var coordinator: ProfileViewControllerCoordinatorDelegate?
     let header = ProfileHederView()
     
-    let userService: UserServiceProtocol
-    let userName: String
-    
-    init(userService: UserServiceProtocol, userName: String) {
-        self.userService = userService
-        self.userName = userName
-        super.init(nibName: nil, bundle: nil)
-        }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    private lazy var signOutButton: CustomButton = {
+        let button = CustomButton(title: "Sign out", titleColor: .white, backgroundColor: nil, backgroundImage: UIImage(imageLiteralResourceName: "pixel"), buttonAction: { [weak self] in
+            self?.delegate?.signOut()
+            self?.coordinator?.navigateToPreviousPage()
+        })
+        button.layer.cornerRadius = 10
+        button.clipsToBounds = true
+        return button
+    }()
     
     var backgroundView1: UIView = {
         let backview = UIView()
@@ -76,11 +76,12 @@ class ProfileViewController: UIViewController {
 
         self.view.backgroundColor = .white
         self.view.addSubview(tableView)
+        self.view.addSubview(signOutButton)
         
         #if DEBUG
         tableView.backgroundColor = .green
         #else
-        tableView.backgroundColor = .blue
+        tableView.backgroundColor = .clear
         #endif
         
         setupTableView()
@@ -114,7 +115,11 @@ class ProfileViewController: UIViewController {
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            signOutButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            signOutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            signOutButton.heightAnchor.constraint(equalToConstant: 30)
         ]
         
         NSLayoutConstraint.activate(constraints)
@@ -211,11 +216,11 @@ extension ProfileViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
-        let userInfo = userService.sendUser(userName: userName)
-        
-        header.fullNameLabel.text = userInfo?.userName
-        header.avatarImageView.image = userInfo?.userAvatar
-        header.statusLabel.text = userInfo?.userStatus
+//        let userInfo = userService.sendUser(userName: userName)
+//
+//        header.fullNameLabel.text = userInfo?.userName
+//        header.avatarImageView.image = userInfo?.userAvatar
+//        header.statusLabel.text = userInfo?.userStatus
         
         let tapGest = UITapGestureRecognizer(target: self, action: #selector(tap))
         header.avatarImageView.addGestureRecognizer(tapGest)

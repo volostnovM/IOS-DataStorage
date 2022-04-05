@@ -29,11 +29,11 @@
 		9F51B4CD2715B72B0010D670 /* PostStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FBBEA6126B42CD800E6CD7A /* PostStorage.swift */; };
 		9F51B4DE2715BAC50010D670 /* StorageService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F51B4A82715B69E0010D670 /* StorageService.framework */; };
 		9F51B4E82715BD0A0010D670 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F51B4E32715BCBD0010D670 /* Post.swift */; };
-		9F63A0C0272942EE0075E199 /* Checker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F63A0BF272942EE0075E199 /* Checker.swift */; };
-		9F63A0C427294C0A0075E199 /* LoginViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F63A0C327294C0A0075E199 /* LoginViewControllerDelegate.swift */; };
 		9F63A0C727294CA90075E199 /* LoginInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F63A0C627294CA90075E199 /* LoginInspector.swift */; };
 		9F63A0CB272963060075E199 /* ProtocolLoginFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F63A0CA272963060075E199 /* ProtocolLoginFactory.swift */; };
 		9F63A0CE2729645C0075E199 /* LoginFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F63A0CD2729645C0075E199 /* LoginFactory.swift */; };
+		9F6D177427FC60F600A451EF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9F6D177327FC60F600A451EF /* GoogleService-Info.plist */; };
+		9F6D177727FC677200A451EF /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6D177627FC677200A451EF /* LoginModel.swift */; };
 		9F7CD09826B2DB90003714A3 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7CD09726B2DB90003714A3 /* LogInViewController.swift */; };
 		9F7FD21E27A423220043192E /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7FD21D27A423220043192E /* CustomButton.swift */; };
 		9F7FD22127A423630043192E /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7FD22027A423630043192E /* CustomTextField.swift */; };
@@ -99,11 +99,11 @@
 		9F51B4AA2715B69E0010D670 /* StorageService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StorageService.h; sourceTree = "<group>"; };
 		9F51B4AB2715B69E0010D670 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9F51B4E32715BCBD0010D670 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
-		9F63A0BF272942EE0075E199 /* Checker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checker.swift; sourceTree = "<group>"; };
-		9F63A0C327294C0A0075E199 /* LoginViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewControllerDelegate.swift; sourceTree = "<group>"; };
 		9F63A0C627294CA90075E199 /* LoginInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginInspector.swift; sourceTree = "<group>"; };
 		9F63A0CA272963060075E199 /* ProtocolLoginFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtocolLoginFactory.swift; sourceTree = "<group>"; };
 		9F63A0CD2729645C0075E199 /* LoginFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFactory.swift; sourceTree = "<group>"; };
+		9F6D177327FC60F600A451EF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		9F6D177627FC677200A451EF /* LoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
 		9F7CD09726B2DB90003714A3 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		9F7FD21D27A423220043192E /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		9F7FD22027A423630043192E /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
@@ -185,6 +185,7 @@
 				060782BA250CE27A00A87020 /* Assets.xcassets */,
 				060782BC250CE27A00A87020 /* LaunchScreen.storyboard */,
 				060782BF250CE27A00A87020 /* Info.plist */,
+				9F6D177327FC60F600A451EF /* GoogleService-Info.plist */,
 				9F63A0C2272942F20075E199 /* Checker */,
 				9F37E29B2720097600A278AD /* User */,
 			);
@@ -268,11 +269,10 @@
 		9F63A0C2272942F20075E199 /* Checker */ = {
 			isa = PBXGroup;
 			children = (
-				9F63A0BF272942EE0075E199 /* Checker.swift */,
-				9F63A0C327294C0A0075E199 /* LoginViewControllerDelegate.swift */,
 				9F63A0C627294CA90075E199 /* LoginInspector.swift */,
 				9F63A0CA272963060075E199 /* ProtocolLoginFactory.swift */,
 				9F63A0CD2729645C0075E199 /* LoginFactory.swift */,
+				9F6D177627FC677200A451EF /* LoginModel.swift */,
 			);
 			path = Checker;
 			sourceTree = "<group>";
@@ -416,6 +416,7 @@
 			mainGroup = 060782A5250CE27700A87020;
 			packageReferences = (
 				9FB0BA51272BDB6700086753 /* XCRemoteSwiftPackageReference "iOSIntPackage" */,
+				9F6D177527FC626100A451EF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 060782AF250CE27700A87020 /* Products */;
 			projectDirPath = "";
@@ -433,6 +434,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				060782BE250CE27A00A87020 /* LaunchScreen.storyboard in Resources */,
+				9F6D177427FC60F600A451EF /* GoogleService-Info.plist in Resources */,
 				060782BB250CE27A00A87020 /* Assets.xcassets in Resources */,
 				060782B9250CE27700A87020 /* Main.storyboard in Resources */,
 			);
@@ -518,10 +520,9 @@
 			files = (
 				9F63A0C727294CA90075E199 /* LoginInspector.swift in Sources */,
 				9F37E2A1272009B700A278AD /* CurrentUserService.swift in Sources */,
-				9F63A0C427294C0A0075E199 /* LoginViewControllerDelegate.swift in Sources */,
 				9F93E68827DB5F000077A56A /* CoordinatorProtocol.swift in Sources */,
 				9F93E68627DB56E90077A56A /* AppearanceNavBar.swift in Sources */,
-				9F63A0C0272942EE0075E199 /* Checker.swift in Sources */,
+				9F6D177727FC677200A451EF /* LoginModel.swift in Sources */,
 				9F93E69527DB633E0077A56A /* LoginCoordinator.swift in Sources */,
 				9F9A634B26BD13D9004563EE /* Photo.swift in Sources */,
 				9F93E68D27DB5F6B0077A56A /* FeedCoordinator.swift in Sources */,
@@ -840,6 +841,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		9F6D177527FC626100A451EF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
 		9FB0BA51272BDB6700086753 /* XCRemoteSwiftPackageReference "iOSIntPackage" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/TrueMax/iOSIntPackage";

@@ -25,13 +25,14 @@ class ProfileCoordinator: CoordinatorProtocol {
         self.navigationController = navigationController
     }
     
-    func openProfileViewController(userName: String) {
-        #if DEBUG
-        let userServise = TestUserService()
-        #else
-        let userServise = CurrentUserService()
-        #endif
-        let profileViewController: ProfileViewController = ProfileViewController(userService: userServise, userName: userName)
+    func openProfileViewController() {
+//        #if DEBUG
+//        let userServise = TestUserService()
+//        #else
+//        let userServise = CurrentUserService()
+//        #endif
+//        let profileViewController: ProfileViewController = ProfileViewController(userService: userServise, userName: userName)
+        let profileViewController: ProfileViewController = ProfileViewController()
         profileViewController.coordinator = self
         self.navigationController.pushViewController(profileViewController, animated: true)
     }

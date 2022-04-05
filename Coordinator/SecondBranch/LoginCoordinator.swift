@@ -21,7 +21,7 @@ class LoginCoordinator: CoordinatorProtocol {
     }
     
     func openLoginViewController() {
-        let loginViewController: LogInViewController = LogInViewController()
+        let loginViewController: LoginViewController = LoginViewController()
         self.navigationController.isNavigationBarHidden = true
         loginViewController.coordinator = self
         loginViewController.delegate = MyLoginFactory().createLoginInspector()
@@ -29,12 +29,13 @@ class LoginCoordinator: CoordinatorProtocol {
     }
 }
 
-extension LoginCoordinator: LogInViewControllerCoordinatorDelegate {
-    func navigateToNextPage(userName: String) {
+extension LoginCoordinator: LoginViewControllerCoordinatorDelegate {
+    
+    func navigateToNextPage() {
         let profileCoordinator = ProfileCoordinator(navigationController: navigationController)
         profileCoordinator.delegate = self
         childCoordinators.append(profileCoordinator)
-        profileCoordinator.openProfileViewController(userName: userName)
+        profileCoordinator.openProfileViewController()
     }
 }
 

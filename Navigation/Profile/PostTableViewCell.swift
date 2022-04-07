@@ -10,31 +10,16 @@ import iOSIntPackage
 class PostTableViewCell: UITableViewCell {
     
     private let imageProcessor = ImageProcessor()
-    private let filters: [ColorFilter] = ColorFilter.allCases
     
-    var content: PostVK? {
+    var content: PostVK {
         didSet {
-            titleLabel.text = content?.author
-            descriptionLabel.text = content?.description
-            likeLabel.text = "Likes: " + String(content!.likes)
-            viewsLabel.text = "Views: " + String(content!.views)
-            
-            if let image = UIImage(named: content!.image) {
-                imageProcessor.processImage(sourceImage: image, filter: filters.randomElement() ?? .chrome) {
-                    (image) in postImageView.image = image
-                }
-            }
+            titleLabel.text = content.author
+            descriptionLabel.text = content.description
+            likeLabel.text = "Likes: " + String(content.likes)
+            viewsLabel.text = "Views: " + String(content.views)
+            postImageView.image = UIImage(named: content.image)
         }
     }
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
-    
     
     var postImageView: UIImageView = {
         let imageView = UIImageView()
@@ -81,13 +66,25 @@ class PostTableViewCell: UITableViewCell {
     }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        self.content = PostVK(author: "", description: "", image: "", likes: 0, views: 0)
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+
         setupViews()
+        cellTaped()
     }
     
     required init?(coder: NSCoder) {
+        self.content = PostVK(author: "", description: "", image: "", likes: 0, views: 0)
         super.init(coder: coder)
         setupViews()
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+    }
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
     }
 }
 
@@ -124,5 +121,16 @@ extension PostTableViewCell {
         ]
         
         NSLayoutConstraint.activate(constraints)
+    }
+}
+
+extension PostTableViewCell {
+    func cellTaped() {
+        let recognize = UITapGestureRecognizer(target: self, action: #selector(tap))
+        recognize.numberOfTapsRequired = 2
+        self.contentView.addGestureRecognizer(recognize)
+    }
+    @objc func tap() {
+        DataBaseService.shared.getPost(self.content.author, self.content.description, self.content.image, self.content.likes, self.content.views)
     }
 }

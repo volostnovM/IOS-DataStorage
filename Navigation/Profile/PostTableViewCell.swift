@@ -11,13 +11,13 @@ class PostTableViewCell: UITableViewCell {
     
     private let imageProcessor = ImageProcessor()
     
-    var content: PostVK {
+    var content: PostVK? {
         didSet {
-            titleLabel.text = content.author
-            descriptionLabel.text = content.description
-            likeLabel.text = "Likes: " + String(content.likes)
-            viewsLabel.text = "Views: " + String(content.views)
-            postImageView.image = UIImage(named: content.image)
+            titleLabel.text = content?.author
+            descriptionLabel.text = content?.description
+            likeLabel.text = "Likes: " + String(content!.likes)
+            viewsLabel.text = "Views: " + String(content!.views)
+            postImageView.image = UIImage(named: content!.image)
         }
     }
     
@@ -131,6 +131,6 @@ extension PostTableViewCell {
         self.contentView.addGestureRecognizer(recognize)
     }
     @objc func tap() {
-        DataBaseService.shared.getPost(self.content.author, self.content.description, self.content.image, self.content.likes, self.content.views)
+        DataBaseService.shared.savePost(autor: self.content?.author, discription: self.content?.description, image: self.content?.image, likes: self.content?.likes, views: self.content?.views)
     }
 }

@@ -11,79 +11,69 @@ import CoreData
 class DataBaseService {
 
     static let shared = DataBaseService()
+    private let dataContainer: NSPersistentContainer
+    private lazy var backgroundContext = dataContainer.newBackgroundContext()
 
-    private lazy var managedObjectModel: NSManagedObjectModel = {
-        guard let modelURL = Bundle.main.url(forResource: "DataModel", withExtension: "momd") else {
-            fatalError("Unable to Find Data Model")
+    init() {
+        let container = NSPersistentContainer(name: "DataModel")
+        container.loadPersistentStores { description, error in
+           if let error = error {
+               fatalError("Unable to load persistent stores: \(error)")
+           }
         }
-        guard let managedObjectModel = NSManagedObjectModel(contentsOf: modelURL) else {
-            fatalError("Unable to Load Data Model")
-        }
-        return managedObjectModel
-    }()
+        self.dataContainer = container
 
-    private lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
-        let persistentStoreCoordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
-        let storeName = "DatabaseModel.sqlite"
-        let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let persistentStoreURL = documentsDirectoryURL.appendingPathComponent(storeName)
-        do {
-            try persistentStoreCoordinator.addPersistentStore(ofType: NSSQLiteStoreType,
-                                                              configurationName: nil,
-                                                              at: persistentStoreURL,
-                                                              options: nil)
-        } catch {
-            fatalError("Unable to Load Persistent Store")
-        }
-        return persistentStoreCoordinator
-    }()
+        backgroundContext.mergePolicy = NSMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
+    }
 
-    private(set) lazy var managedObjectContext: NSManagedObjectContext = {
-        let managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
-        managedObjectContext.persistentStoreCoordinator = self.persistentStoreCoordinator
-        return managedObjectContext
-    }()
-
-    func getPost(_ autor: String, _ discription: String, _ image: String, _ likes: Int16, _ views: Int16) {
-        let fetch = PostModel.fetchRequest()
-        do {
-            let setings = try managedObjectContext.fetch(fetch)
-            if let newLikedPost = NSEntityDescription.insertNewObject(forEntityName: "PostModel", into: managedObjectContext) as? PostModel {
-                newLikedPost.autor = autor
-                newLikedPost.discription = discription
-                newLikedPost.image = image
-                newLikedPost.likes = likes
-                newLikedPost.views = views
+    func savePost(autor: String?, discription: String?, image: String?, likes: Int?, views: Int?) {
+        backgroundContext.perform { [weak self] in
+            guard let self = self else {return}
+                guard let uAutor = autor, let uImage = image,
+                      let uLikes = likes, let uViews = views else {return}
+            let newLikedPost = NSEntityDescription.insertNewObject(forEntityName: "PostModel", into: self.backgroundContext) as! PostModel
+                newLikedPost.autor = uAutor
+                newLikedPost.discription = discription ?? ""
+                newLikedPost.image = uImage
+                newLikedPost.likes = Int16(uLikes)
+                newLikedPost.views = Int16(uViews)
+            do {
+                try self.backgroundContext.save()
+            } catch let error {
+                print(error)
             }
-            try managedObjectContext.save()
-            print(setings.count + 1)
-        } catch let error {
-            print(error)
         }
     }
 
-    func setPost() -> [PostVK] {
+    func setPosts() -> [PostVK] {
+        var uPosts = [PostVK]()
         let fetch = PostModel.fetchRequest()
         do {
-            var uPosts = [PostVK]()
-            let posts = try managedObjectContext.fetch(fetch)
+            let posts = try backgroundContext.fetch(fetch)
             for post in posts {
-            guard let autor = post.autor, let discription = post.discription,
-                  let image = post.image else {return []}
-            let uPost = PostVK(author: autor, description: discription, image: image, likes: post.likes, views: post.views)
+                guard let autor = post.autor,
+                      let image = post.image else {return []}
+                let uPost = PostVK(author: autor, description: post.discription ?? "", image: image, likes: Int(post.likes), views: Int(post.views))
                 uPosts.append(uPost)
             }
-            return uPosts
-        } catch {
-            fatalError()
-        }
-    }
-
-func deleteAll() {
-    do {
-            try managedObjectContext.execute(NSBatchDeleteRequest(fetchRequest: NSFetchRequest(entityName: "PostModel")))
         } catch let error {
             print(error)
+        }
+        return uPosts
+    }
+
+    func deletePost(_ indexPath: Int) {
+        dataContainer.viewContext.performAndWait {
+            let request = PostModel.fetchRequest()
+            do {
+                let posts = try dataContainer.viewContext.fetch(request)
+                let post = posts[indexPath]
+                dataContainer.viewContext.delete(post)
+                try dataContainer.viewContext.save()
+                print(posts.count)
+            } catch let error {
+                print(error)
+            }
         }
     }
 }

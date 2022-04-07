@@ -18,23 +18,22 @@ class LikeViewController: UIViewController {
     }()
 
     var posts: [PostVK] {
-        return DataBaseService.shared.setPost()
+        return DataBaseService.shared.setPosts()
     }
+    
+    var filteredPosts: [PostVK] = []
+
+    var isFiltered = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
-        let deleteButton = UIBarButtonItem(title: "Удалить все", style: .plain, target: self, action: #selector(deleteAll))
-        self.navigationItem.rightBarButtonItem = deleteButton
         tableView.dataSource = self
+        tableView.delegate = self
         tabBarController?.delegate = self
         setupViews()
+        naviConfig()
         tableView.reloadData()
-    }
-
-    @objc func deleteAll() {
-        DataBaseService.shared.deleteAll()
-        self.tableView.reloadData()
     }
 }
 
@@ -50,17 +49,42 @@ extension LikeViewController {
     }
 }
 
-extension LikeViewController: UITableViewDataSource {
+extension LikeViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        self.posts.count
+        if isFiltered == false {
+            return self.posts.count
+        } else {
+            return self.filteredPosts.count
+        }
     }
 
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: PostTableViewCell.self), for: indexPath) as? PostTableViewCell
-        cell?.content = self.posts[indexPath.item]
+        if isFiltered == false {
+            cell?.content = self.posts[indexPath.item]
+        } else {
+            cell?.content = self.filteredPosts[indexPath.item]
+        }
         return cell ?? UITableViewCell()
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let delete = UIContextualAction(style: .destructive, title: "Удалить") {_,_,_ in
+            if !self.isFiltered {
+                DataBaseService.shared.deletePost(indexPath.item)
+                self.tableView.reloadData()
+            } else {
+                let post = self.filteredPosts[indexPath.item]
+                if let index = self.posts.firstIndex(where: {$0.author == post.author}) {
+                    DataBaseService.shared.deletePost(index)
+                    self.filteredPosts.remove(at: indexPath.item)
+                    self.tableView.reloadData()
+                }
+            }
+        }
+        return UISwipeActionsConfiguration(actions: [delete])
     }
 
 }
@@ -68,5 +92,37 @@ extension LikeViewController: UITableViewDataSource {
 extension LikeViewController: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         self.tableView.reloadData()
+    }
+}
+
+extension LikeViewController {
+    func naviConfig() {
+        let deleteButton = UIBarButtonItem(title: "Показать все", style: .plain, target: self, action: #selector(deleteAll))
+        self.navigationItem.rightBarButtonItem = deleteButton
+
+        let sortButton = UIBarButtonItem(title: "Поиск", style: .plain, target: self, action: #selector(sortTapped))
+        self.navigationItem.leftBarButtonItem = sortButton
+    }
+
+    @objc func deleteAll() {
+        self.isFiltered = false
+        self.tableView.reloadData()
+    }
+
+    @objc func sortTapped() {
+        let alert = UIAlertController(title: "Поиск по автору", message: "Введите имя автора", preferredStyle: .alert)
+        alert.addTextField(configurationHandler: nil)
+        let alertOK = UIAlertAction(title: "Ок", style: .default) {_ in
+            guard let request = alert.textFields?[0].text else {return}
+            self.filteredPosts = self.posts.filter { (post: PostVK) -> Bool in
+                return post.author.lowercased().contains(request.lowercased())
+            }
+            self.isFiltered = true
+            self.tableView.reloadData()
+            print(self.filteredPosts.count)
+        }
+        let alertNo = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        [alertNo,alertOK].forEach(alert.addAction(_:))
+        present(alert, animated: true)
     }
 }

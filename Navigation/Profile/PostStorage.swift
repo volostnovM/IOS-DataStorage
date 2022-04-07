@@ -9,8 +9,8 @@ struct PostVK {
     let author: String
     let description: String
     let image: String
-    let likes: Int
-    let views: Int
+    let likes: Int16
+    let views: Int16
 }
 
 struct Storage {
@@ -20,29 +20,29 @@ struct Storage {
             author: "Ivan",
             description: "Интересный пост от Ивана",
             image: "public_1",
-            likes: 5,
-            views: 255
+            likes: Int16.random(in: 0...500),
+            views: Int16.random(in: 500...1000)
         ),
     PostVK(
             author: "Masha",
             description: "Интересный пост от Маши",
             image: "public_2",
-            likes: 15,
-            views: 5000
+            likes: Int16.random(in: 0...500),
+            views: Int16.random(in: 500...1000)
         ),
     PostVK(
             author: "Dasha",
             description: "Интересный пост от Даши",
             image: "public_3",
-            likes: 52,
-            views: 300
+            likes: Int16.random(in: 0...500),
+            views: Int16.random(in: 500...1000)
         ),
     PostVK(
             author: "Petr",
             description: "Интересный пост от Петра",
             image: "public_4",
-            likes: 57,
-            views: 100
+            likes: Int16.random(in: 0...500),
+            views: Int16.random(in: 500...1000)
         ),
     ]
 }
